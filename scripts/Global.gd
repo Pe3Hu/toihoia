@@ -20,6 +20,10 @@ func init_window_size():
 func init_primary_key():
 	list.primary_key = {}
 	list.primary_key.encounter = 0
+	list.primary_key.champion = 0
+	list.primary_key.ruin = 0
+	list.primary_key.zone = 0
+	list.primary_key.monster = 0
 
 func init_list():
 	init_window_size()
@@ -31,7 +35,24 @@ func init_array():
 	array.button.response.append([])
 	
 	for _i in 12:
-		array.button.response[0].append("Normal") 
+		array.button.response[0].append("Normal")
+	
+	array.champion = []
+	array.ruin = []
+	array.monster = []
+	
+	array.pool = {}
+	array.pool.zone = [
+		[1, 2, 3],
+		[1, 2, 3, 4],
+		[2, 3, 4],
+		[2, 3, 4, 5]
+	]
+	
+	
+	array.sequence = {} 
+	array.sequence["A000040"] = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29]
+	array.sequence["A000124"] = [7, 11, 16, 22, 29, 37, 46, 56, 67, 79, 92, 106, 121, 137, 154, 172, 191, 211]
 
 func init_scene():
 	pass
@@ -47,6 +68,8 @@ func init_obj():
 func init_data():
 	data.size = {}
 	data.size.bar = Vector2(91,30)
+	data.monster = {}
+	data.monster.n = 4
 
 func init_flag():
 	flag.ready = false

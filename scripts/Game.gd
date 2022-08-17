@@ -7,11 +7,22 @@ var triangle_texture = load("res://assets/icons/uicons/triangle.png")
 var cross_texture = load("res://assets/icons/uicons/cross.png")
 
 func _ready():
-	generate_action()
-	set_ui()
-	pass
+	#generate_action()
+	init_champions()
+	init_ruins()
 	
-func set_ui():
+func init_champions():
+	var champion = Classes.Champion.new()
+	Global.array.champion.append(champion)
+
+func init_ruins():
+	var input = {}
+	input.rank = 0
+	input.type = "Basic"
+	var ruin = Classes.Ruin.new(input)
+	Global.array.ruin.append(ruin)
+
+func init_monsters():
 	pass
 
 func generate_action():
@@ -28,9 +39,8 @@ func generate_action():
 				node.set_texture(square_texture) 
 			2:
 				node.set_texture(triangle_texture) 
-	
+
 func _input(event):
-	
 	if event is InputEventMouseButton:
 		if Global.flag.generate:
 			generate_action()
@@ -44,7 +54,6 @@ func _input(event):
 			var button = get_node(button_path) 
 			if Global.array.button.response[0][_i] != "Pressed":
 				Global.array.button.response[0][_i] = "Normal"
-			
 			
 			if button.is_hovered():
 				var flag = _i < Global.array.button.response[0].size()-2
@@ -66,8 +75,6 @@ func _input(event):
 						hovered_button.disabled = true
 						hovered_button.set_disabled_texture(parent_node.texture)
 						Global.array.button.response[0][_i] = "Disabled"
-		
-		
 
 func _process(delta):
 	pass

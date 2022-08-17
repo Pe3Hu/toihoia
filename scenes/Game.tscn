@@ -24,12 +24,14 @@ tint_under = Color( 0.627451, 1, 0.458824, 1 )
 tint_progress = Color( 0.964706, 0.584314, 0.0470588, 1 )
 
 [node name="ChampionPanel" parent="." instance=ExtResource( 3 )]
+visible = false
 margin_left = 100.0
 margin_top = 100.0
 margin_right = -924.0
 margin_bottom = -500.0
 
 [node name="Action" type="HBoxContainer" parent="."]
+visible = false
 margin_left = 100.0
 margin_top = 200.0
 margin_right = 100.0
