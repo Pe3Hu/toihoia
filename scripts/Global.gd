@@ -40,19 +40,64 @@ func init_array():
 	array.champion = []
 	array.ruin = []
 	array.monster = []
+		
+	array.sequence = {} 
+	array.sequence["A000040"] = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29]
+	array.sequence["A000124"] = [7, 11, 16] #, 22, 29, 37, 46, 56, 67, 79, 92, 106, 121, 137, 154, 172, 191, 211]
 	
 	array.pool = {}
-	array.pool.zone = [
+	array.pool.monster = [
 		[1, 2, 3],
 		[1, 2, 3, 4],
 		[2, 3, 4],
 		[2, 3, 4, 5]
 	]
+	init_pool_zone()
+
+func init_pool_zone():
+	array.pool.zone = []
 	
+	for sum in array.sequence["A000124"]:
+		var options = []
+		var partition = []
+		
+		partition.resize(sum)
+		partition.fill(1)
+		
+		while partition != null:
+			var flag = true
+			
+			for num in partition:
+				flag = flag && array.sequence["A000040"].has(num)
+			
+			if flag:
+				
+				options.append(partition.duplicate())
+				
+			partition = get_next_partition(partition)
+			
+		array.pool.zone.append(options)
+
+func get_next_partition(partition):
+	if partition.size() == 1:
+		return null
 	
-	array.sequence = {} 
-	array.sequence["A000040"] = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29]
-	array.sequence["A000124"] = [7, 11, 16, 22, 29, 37, 46, 56, 67, 79, 92, 106, 121, 137, 154, 172, 191, 211]
+	var index_min = 0
+	
+	for _i in partition.size()-1:
+		if partition[_i] < partition[index_min]:
+			index_min = _i
+	
+	partition[index_min] += 1
+	partition[-1] -= 1
+	
+	var part_sum = 0
+	for _j in range(index_min+1, partition.size()):
+		part_sum += partition[_j]
+	partition.resize(index_min+1) 
+	for _i in part_sum:
+		partition.append(1)
+	return partition
 
 func init_scene():
 	pass

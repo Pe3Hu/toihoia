@@ -10,6 +10,7 @@ func _ready():
 	#generate_action()
 	init_champions()
 	init_ruins()
+	start_game()
 	
 func init_champions():
 	var champion = Classes.Champion.new()
@@ -22,8 +23,12 @@ func init_ruins():
 	var ruin = Classes.Ruin.new(input)
 	Global.array.ruin.append(ruin)
 
-func init_monsters():
-	pass
+func start_game():
+	var ruin = Global.array.ruin[0]
+	var champion = Global.array.champion[0]
+	
+	for _i in 10:
+		champion.overcome(ruin)
 
 func generate_action():
 	for _i in 3:
