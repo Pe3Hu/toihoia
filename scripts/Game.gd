@@ -13,22 +13,29 @@ func _ready():
 	start_game()
 	
 func init_champions():
-	var champion = Classes.Champion.new()
-	Global.array.champion.append(champion)
+	
+	for _i in 11:
+		var champion = Classes.Champion.new()
+		Global.array.champion.append(champion)
 
 func init_ruins():
 	var input = {}
 	input.rank = 0
 	input.type = "Basic"
+	input.I = true
+	input.R = false
+	input.S = false
 	var ruin = Classes.Ruin.new(input)
 	Global.array.ruin.append(ruin)
 
 func start_game():
 	var ruin = Global.array.ruin[0]
-	var champion = Global.array.champion[0]
+	#var champion = Global.array.champion[0]
 	
-	for _i in 10:
+	for champion in Global.array.champion:
 		champion.overcome(ruin)
+	
+	
 
 func generate_action():
 	for _i in 3:

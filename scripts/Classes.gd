@@ -7,7 +7,6 @@ class Champion:
 	var array = {}
 	var list = {}
 	var flag = {}
-	var stats = {}
 	
 	func _init():
 		number.index = Global.list.primary_key.champion
@@ -26,18 +25,20 @@ class Champion:
 		array.argument.append(argument)
 		
 		init_stats()
+		number.wound = 0
 
 	func init_stats():
+		number.stats = {}
 		#intensity of current
-		stats.I = 10
+		number.stats.I = 10
 		#resistance
-		stats.R = 100
+		number.stats.R = 100
 		#seclusion
-		stats.S = 10
+		number.stats.S = 10
 
 	func calc_p():
 		#power
-		stats.P = pow(stats.I, 2) * stats.R
+		number.stats.P = pow(number.stats.I, 2) * number.stats.R
 
 	func calc_t():
 		#find correct time w.o. glitch
@@ -45,7 +46,7 @@ class Champion:
 		var flag = true
 		var glitchs = []
 		
-		for _i in stats.S:
+		for _i in number.stats.S:
 			glitchs.append(0)
 		
 		while flag:
@@ -68,11 +69,26 @@ class Champion:
 			for monster in zone.array.monster:
 				while monster.number.hp > 0:
 					var time = calc_t()
-					ruin.number.time += time
-					var work = stats.P * time / monster.number.uof
+					ruin.number.time.current += time
+					var work = number.stats.P * time / monster.number.uof
 					monster.number.hp -= work
+					var wound = zone.calc_wounds()
+					number.wound += wound
 		
-		print("time: ",ruin.number.time)
+		ruin.get_appraisal("time")
+		var result = {}
+		var part = {}
+		result.time = {}
+		result.time.owner = number.index
+		result.time.value = ruin.number.time.current
+		result.wound = {}
+		result.wound.owner = number.index
+		result.wound.value = number.wound
+		ruin.update_top(result)
+		reset()
+
+	func reset():
+		number.wound = 0
 
 class Worker:
 	var number = {}
@@ -80,7 +96,6 @@ class Worker:
 	var array = {}
 	var list = {}
 	var flag = {}
-	var stats = {}
 	
 	func _init(input_):
 		number.index = input_.index
@@ -99,7 +114,7 @@ class Ruin:
 	var array = {}
 	var list = {}
 	var flag = {}
-	
+
 	func _init(input_):
 		number.index = Global.list.primary_key.ruin
 		Global.list.primary_key.ruin += 1
@@ -107,15 +122,30 @@ class Ruin:
 		string.type = input_.type
 		number.rank = input_.rank
 		number.difficulty = Global.array.sequence["A000124"][number.rank]
-	
+		number.time = {}
+		number.appraisal = {}
+		flag.stat = {}
+		flag.stat.I = input_.I
+		flag.stat.R = input_.R
+		flag.stat.S = input_.S
+		array.top = {}
+		array.top.time = []
+		array.top.wound = []
+		string.sort = {}
+		string.sort.time = "sort_ascending"
+		string.sort.wound = "sort_ascending"
+		
+		init_rewards()
+
 	func init_zones():
-		number.time = 0 
+		number.time.perfect = 0 
+		number.time.current = 0
+		number.appraisal.time = 0
 		array.zone = []
 		var pool = Global.array.pool.zone[number.rank]
 		Global.rng.randomize()
 		var index_r = Global.rng.randi_range(0, pool.size()-1)
 		
-		print(pool[index_r])
 		for difficulty in pool[index_r]:
 			var input = {}
 			input.difficulty = difficulty
@@ -123,6 +153,44 @@ class Ruin:
 			input.ruin = self
 			var zone = Classes.Zone.new(input)
 			array.zone.append(zone)
+
+	func init_rewards():
+		array.pizza = []
+		
+		for key in flag.stat.keys():
+			if flag.stat[key]:
+				for pizza in Global.array.pool.pizza:
+					if pizza[key] == 2:
+						array.pizza.append(pizza)
+
+	func get_appraisal(type_):
+		match type_:
+			"time":
+				var koef = stepify(number.time.current/number.time.perfect, 0.01)
+				var k = koef * 100 - 100
+				var degree = 0
+				var n = 2
+				
+				while n <= k:
+					degree += 1
+					n *= 2
+
+	func update_top(result_):
+		for key in result_.keys():
+			var top = array.top[key]
+			top.append(result_[key])
+			
+			top.sort_custom(Sorter, string.sort[key])
+			
+			if top.size() > Global.data.size.top:
+				top.resize(Global.data.size.top)
+			
+			var arr = []
+			for a in array.top[key]:
+				arr.append(a.value)
+			print(arr, key)
+		
+		
 
 class Zone:
 	var number = {}
@@ -137,7 +205,7 @@ class Zone:
 		number.difficulty = input_.difficulty
 		obj.ruin = input_.ruin 
 		init_monsters()
-	
+
 	func init_monsters():
 		array.monster = []
 		var pool = number.difficulty
@@ -150,7 +218,6 @@ class Zone:
 				var max_i = min(Global.array.pool.monster[number.rank].back(), pool)
 				
 				if threat <= pool:
-					#print(threat, "-", pool)
 					for _j in pow(max_i-_i, 2):
 						options.append(threat)
 			
@@ -165,6 +232,16 @@ class Zone:
 			var monster = Classes.Monster.new(input)
 			array.monster.append(monster)
 			pool -= options[index_i]
+			obj.ruin.number.time.perfect += monster.number.hp
+
+	func calc_wounds():
+		var wound = 0
+		
+		for monster in array.monster:
+			if monster.number.hp > 0:
+				wound += monster.number.threat
+		
+		return wound
 
 class Monster:
 	var number = {}
@@ -193,3 +270,31 @@ class Loot:
 	
 	func _init(input_):
 		pass
+
+class Pizza:
+	var number = {}
+	var string = {}
+	
+	func _init(input_):
+		string.abundance = {}
+		string.abundance.rank = ""
+		string.abundance.name = ""
+		
+		string.chart = {}
+		string.chart.name = ""
+		
+		number.purity = {} 
+		number.purity.rank = -1
+		number.purity.value = -1
+		
+
+class Sorter:
+    static func sort_ascending(a, b):
+        if a.value < b.value:
+            return true
+        return false
+
+    static func sort_descending(a, b):
+        if a.value > b.value:
+            return true
+        return false

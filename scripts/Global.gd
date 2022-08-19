@@ -40,7 +40,7 @@ func init_array():
 	array.champion = []
 	array.ruin = []
 	array.monster = []
-		
+	
 	array.sequence = {} 
 	array.sequence["A000040"] = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29]
 	array.sequence["A000124"] = [7, 11, 16] #, 22, 29, 37, 46, 56, 67, 79, 92, 106, 121, 137, 154, 172, 191, 211]
@@ -52,7 +52,9 @@ func init_array():
 		[2, 3, 4],
 		[2, 3, 4, 5]
 	]
+	
 	init_pool_zone()
+	init_pool_pizza()
 
 func init_pool_zone():
 	array.pool.zone = []
@@ -77,6 +79,19 @@ func init_pool_zone():
 			partition = get_next_partition(partition)
 			
 		array.pool.zone.append(options)
+
+func init_pool_pizza():
+	array.pool.pizza = []
+	
+	for _i in range(0,3):
+		for _r in range(0,3):
+			for _s in range(0,3):
+				if _i+_r+_s == 3 && max(_i,max(_r,_s)) == 2:
+					var pizza = {}
+					pizza.I = _i
+					pizza.R = _r
+					pizza.S = _s
+					array.pool.pizza .append(pizza)
 
 func get_next_partition(partition):
 	if partition.size() == 1:
@@ -113,6 +128,7 @@ func init_obj():
 func init_data():
 	data.size = {}
 	data.size.bar = Vector2(91,30)
+	data.size.top = 10
 	data.monster = {}
 	data.monster.n = 4
 
