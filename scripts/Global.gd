@@ -9,7 +9,7 @@ var node = {}
 var ui = {}
 var obj = {}
 var flag = {}
-var data = {}
+var number = {}
 
 func init_window_size():
 	list.window_size = {}
@@ -18,16 +18,35 @@ func init_window_size():
 	list.window_size.center = Vector2(list.window_size.width/2, list.window_size.height/2)
 
 func init_primary_key():
-	list.primary_key = {}
-	list.primary_key.encounter = 0
-	list.primary_key.champion = 0
-	list.primary_key.ruin = 0
-	list.primary_key.zone = 0
-	list.primary_key.monster = 0
+	number.primary_key = {}
+	number.primary_key.encounter = 0
+	number.primary_key.champion = 0
+	number.primary_key.ruin = 0
+	number.primary_key.zone = 0
+	number.primary_key.monster = 0
+
+func init_stat():
+	list.stat = {}
+	list.stat["Storm"] = {}
+	#intensity of current
+	list.stat["Storm"].I = {}
+	list.stat["Storm"].I.base = 10
+	list.stat["Storm"].I.step = 1
+	#resistance
+	list.stat["Storm"].R = {}
+	list.stat["Storm"].R.base = 100
+	list.stat["Storm"].R.step = 20
+	#seclusion
+	list.stat["Storm"].S = {}
+	list.stat["Storm"].S.base = 10
+	list.stat["Storm"].S.step = 1
+	list.stat["Art"] = {}
+	list.stat["Expansion"] = {}
 
 func init_list():
 	init_window_size()
 	init_primary_key()
+	init_stat()
 
 func init_array():
 	array.button = {}
@@ -43,7 +62,9 @@ func init_array():
 	
 	array.sequence = {} 
 	array.sequence["A000040"] = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29]
+	array.sequence["A000045"] = [89, 55, 34, 21, 13, 8, 5, 3, 2, 1, 1]
 	array.sequence["A000124"] = [7, 11, 16] #, 22, 29, 37, 46, 56, 67, 79, 92, 106, 121, 137, 154, 172, 191, 211]
+	array.sequence["A001358"] = [4, 6, 9, 10, 14, 15, 21, 22, 25, 26]
 	
 	array.pool = {}
 	array.pool.monster = [
@@ -55,6 +76,10 @@ func init_array():
 	
 	init_pool_zone()
 	init_pool_pizza()
+	
+	array.memory = {}
+	array.memory.time = []
+	array.memory.wound = []
 
 func init_pool_zone():
 	array.pool.zone = []
@@ -120,17 +145,18 @@ func init_scene():
 func init_node():
 	node.TimeBar = get_node("/root/Game/TimeBar") 
 	node.Game = get_node("/root/Game") 
-	
+
 func init_obj():
 	obj.field = {}
 	ui.bar = []
 
-func init_data():
-	data.size = {}
-	data.size.bar = Vector2(91,30)
-	data.size.top = 10
-	data.monster = {}
-	data.monster.n = 4
+func init_number():
+	number.size = {}
+	number.size.top = 10
+	number.size.monster = 4
+	number.argument = {}
+	number.argument.base = 10
+	number.argument.degree = 2
 
 func init_flag():
 	flag.ready = false
@@ -142,7 +168,7 @@ func _ready():
 	init_scene()
 	init_node()
 	init_obj()
-	init_data()
+	init_number()
 	init_flag()
 
 

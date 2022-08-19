@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/imgonline-com-ua-ReplaceColor-ghK7HW5LKa4-removebg-preview.png-bfbed2c11388cf71fd8d4e4c39e4d87a.stex"
+path="res://.import/ring.png-6f1d5d87b71bf84fa6d3469ca2430095.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/bars/imgonline-com-ua-ReplaceColor-ghK7HW5LKa4-removebg-preview.png"
-dest_files=[ "res://.import/imgonline-com-ua-ReplaceColor-ghK7HW5LKa4-removebg-preview.png-bfbed2c11388cf71fd8d4e4c39e4d87a.stex" ]
+source_file="res://assets/bars/ring.png"
+dest_files=[ "res://.import/ring.png-6f1d5d87b71bf84fa6d3469ca2430095.stex" ]
 
 [params]
 

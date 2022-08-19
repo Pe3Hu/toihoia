@@ -14,7 +14,7 @@ func _ready():
 	
 func init_champions():
 	
-	for _i in 11:
+	for _i in 1:
 		var champion = Classes.Champion.new()
 		Global.array.champion.append(champion)
 
@@ -32,9 +32,11 @@ func start_game():
 	var ruin = Global.array.ruin[0]
 	#var champion = Global.array.champion[0]
 	
-	for champion in Global.array.champion:
-		champion.overcome(ruin)
+	for _i in 10:
+		for champion in Global.array.champion:
+			champion.overcome(ruin)
 	
+	print(Global.array.memory.time)
 	
 
 func generate_action():
