@@ -8,7 +8,7 @@ class Champion:
 	var list = {}
 	var flag = {}
 	var obj = {}
-	
+
 	func _init():
 		number.index = Global.number.primary_key.champion
 		Global.number.primary_key.champion += 1
@@ -20,13 +20,13 @@ class Champion:
 		var input = {}
 		input.name = "Art"
 		var argument = Classes.Argument.new(input)
-		list.argument [input.name] = argument
+		list.argument[input.name] = argument
 		input.name = "Expansion"
 		argument = Classes.Argument.new(input)
-		list.argument [input.name] = argument
+		list.argument[input.name] = argument
 		input.name = "Storm"
 		argument = Classes.Argument.new(input)
-		list.argument [input.name] = argument
+		list.argument[input.name] = argument
 
 	func calc_t():
 		#find correct time w.o. glitch
@@ -34,7 +34,7 @@ class Champion:
 		var flag = true
 		var glitchs = []
 		
-		for _i in obj.argument.list.S.number.value:
+		for _i in obj.argument.list.stat.S.number.value:
 			glitchs.append(0)
 		
 		while flag:
@@ -52,7 +52,8 @@ class Champion:
 	func overcome(ruin):
 		obj.ruin = ruin
 		obj.argument = list.argument["Storm"]
-		var power = pow(obj.argument.list.I.number.value, 2) * obj.argument.list.R.number.value
+		var a = obj.argument
+		var power = pow(obj.argument.list.stat.I.number.value, 2) * obj.argument.list.stat.R.number.value
 		#ruin.init_zones()
 		
 		for zone in obj.ruin.array.zone:
@@ -78,14 +79,16 @@ class Champion:
 		result.wound.value = number.wound
 		obj.ruin.update_top(result)
 		
+		var kills = calc_kills()
 		var experience = {}
-		experience.I = calc_kills()
+		experience.I = kills
 		experience.R = result.wound.value
 		experience.S = result.time.value
 		
 		for key in experience.keys():
-			obj.argument.list[key].get_experience(experience[key])
-			print()
+			obj.argument.list.stat[key].get_experience(experience[key])
+		
+		obj.ruin.generate_rewards(kills)
 		
 		reset()
 
@@ -107,46 +110,49 @@ class Champion:
 		obj.ruin = null
 		obj.argument = null
 
-class Worker:
+class Servitor:
 	var number = {}
 	var string = {}
 	var array = {}
 	var list = {}
 	var flag = {}
-	
+
 	func _init(input_):
 		number.index = input_.index
 
 class Argument:
 	var list = {}
 	var string = {}
-	
+
 	func _init(input_):
 		string.name = input_.name
 		init_stats()
-	
+
 	func init_stats():
+		list.stat = {}
+		
 		for key in Global.list.stat[string.name]:
 			var input = {}
 			input.argument = string.name
 			input.key = key
-			list[key] = Classes.Stat.new(input)
+			list.stat[key] = Classes.Stat.new(input)
 
 class Stat:
 	var number = {}
 	var string = {}
-	var key = null
-	
+	var key = {}
+
 	func _init(input_):
 		string.argument = input_.argument
-		key = input_.key
+		key = {}
+		key.self = input_.key
 		number.stage = 0
 		
 		get_base()
 
 	func get_base():
-		number.value = Global.list.stat[string.argument][key].base
-		number.step = Global.list.stat[string.argument][key].step
+		number.value = Global.list.stat[string.argument][key.self].base
+		number.step = Global.list.stat[string.argument][key.self].step
 		number.current = 0
 		number.max = pow(Global.number.argument.base, Global.number.argument.degree)
 	
@@ -187,9 +193,10 @@ class Ruin:
 		string.sort = {}
 		string.sort.time = "sort_ascending"
 		string.sort.wound = "sort_ascending"
+		list.appraisal = {}
 		
 		init_zones()
-		init_rewards()
+		init_pizzas()
 
 	func init_zones():
 		number.time.perfect = 0 
@@ -208,7 +215,7 @@ class Ruin:
 			var zone = Classes.Zone.new(input)
 			array.zone.append(zone)
 
-	func init_rewards():
+	func init_pizzas():
 		array.pizza = []
 		
 		for key in flag.stat.keys():
@@ -228,6 +235,8 @@ class Ruin:
 				while n <= k:
 					degree += 1
 					n *= 2
+					
+				list.appraisal[type_] = degree
 
 	func update_top(result_):
 		for key in result_.keys():
@@ -244,10 +253,11 @@ class Ruin:
 				arr.append(a.value)
 			#print(arr, key)
 			Global.array.memory[key].append(result_[key].value)
-			
 
-	func generate_rewards():
-		pass
+	func generate_rewards(kills_):
+		var score = round(sqrt(kills_)) - list.appraisal["time"]
+		#print(kills_)
+		#print(score)
 
 	func reset():
 		number.time.current = 0
@@ -314,7 +324,7 @@ class Zone:
 class Monster:
 	var number = {}
 	var obj = {}
-	
+
 	func _init(input_):
 		number.index = Global.number.primary_key.monster
 		Global.number.primary_key.monster += 1
@@ -332,10 +342,18 @@ class Monster:
 				number.worth = pow(number.echelon, 2)
 				#unit of measurement
 				number.uof = 10000
+				number.timer = 0
+				number.cd = 1
+
+class LootBox:
+	var number = {}
+
+	func _init(input_):
+		pass
 
 class Loot:
 	var number = {}
-	
+
 	func _init(input_):
 		pass
 
@@ -354,6 +372,63 @@ class Pizza:
 		number.purity = {} 
 		number.purity.rank = -1
 		number.purity.value = -1
+
+class Minimap:
+	var number = {}
+	var array = {}
+
+	func _init():
+		array.district = []
+		init_districts()
+		hue_districts()
+
+	func init_districts():
+		for _i in Global.number.size.minimap:
+			array.district.append([])
+			
+			for _j in Global.number.size.minimap:
+				var district = Classes.District.new()
+				array.district[_i].append(district)
+
+	func init_center():
+		var mid = round(Global.number.size.minimap/2)
+		var grids = [Vector2(mid,mid)]
+		var shifts = [
+			[Vector2(-1,0),Vector2(1,0)],
+			[Vector2(0,-1),Vector2(0,1)]
+			]
+		
+		for _i in shifts.size():
+			Global.rng.randomize()
+			var index_r = Global.rng.randi_range(0, shifts.size()-1)
+			var index_f =  Global.rng.randi_range(0, shifts[index_r].size()-1)
+			var grid = Vector2(grids.back().x,grids.back().y)
+			grid += shifts[index_r][index_f]
+			grids.append(grid)
+			shifts.pop_at(index_r)
+		
+		for grid in grids:
+			array.district[grid.y][grid.x].obj.self.color = Color().from_hsv(0.5,1,1) 
+		
+			print(grids)
+	
+
+	func hue_districts():
+		init_center()
+
+class District:
+	var number = {}
+	var obj = {}
+	var array = []
+
+	func _init():
+		number.index = Global.number.primary_key.district
+		Global.number.primary_key.district += 1
+		obj.parent = Global.node.minimap
+		obj.self = preload("res://scenes/District.tscn").instance()
+		obj.self.rect_min_size = Vector2(Global.number.size.district,Global.number.size.district)
+		obj.parent.add_child(obj.self)
+		array.region = []
 
 class Sorter:
     static func sort_ascending(a, b):

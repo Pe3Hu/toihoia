@@ -11,6 +11,7 @@ func _ready():
 	init_champions()
 	init_ruins()
 	start_game()
+	Global.obj.minimap = Classes.Minimap.new()
 	
 func init_champions():
 	
@@ -36,7 +37,7 @@ func start_game():
 		for champion in Global.array.champion:
 			champion.overcome(ruin)
 	
-	print(Global.array.memory.time)
+	#print(Global.array.memory.time)
 	
 
 func generate_action():

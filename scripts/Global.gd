@@ -24,6 +24,7 @@ func init_primary_key():
 	number.primary_key.ruin = 0
 	number.primary_key.zone = 0
 	number.primary_key.monster = 0
+	number.primary_key.district = 0
 
 func init_stat():
 	list.stat = {}
@@ -145,6 +146,7 @@ func init_scene():
 func init_node():
 	node.TimeBar = get_node("/root/Game/TimeBar") 
 	node.Game = get_node("/root/Game") 
+	node.minimap = get_node("/root/Game/Minimap") 
 
 func init_obj():
 	obj.field = {}
@@ -153,7 +155,10 @@ func init_obj():
 func init_number():
 	number.size = {}
 	number.size.top = 10
+	number.size.minimap = 9
 	number.size.monster = 4
+	number.size.district = 16
+	
 	number.argument = {}
 	number.argument.base = 10
 	number.argument.degree = 2

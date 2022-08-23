@@ -1,0 +1,6 @@
+[gd_scene format=2]
+
+[node name="Minimap" type="GridContainer"]
+margin_right = 40.0
+margin_bottom = 40.0
+columns = 9
