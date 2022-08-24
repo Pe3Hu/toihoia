@@ -25,6 +25,7 @@ func init_primary_key():
 	number.primary_key.zone = 0
 	number.primary_key.monster = 0
 	number.primary_key.district = 0
+	number.primary_key.region = 0
 
 func init_stat():
 	list.stat = {}
@@ -81,6 +82,14 @@ func init_array():
 	array.memory = {}
 	array.memory.time = []
 	array.memory.wound = []
+	array.neighbor = {}
+	array.neighbor["4"] = [
+		Vector2(0,-1),
+		Vector2(1,0),
+		Vector2(0,1),
+		Vector2(-1,0)
+	]
+	
 
 func init_pool_zone():
 	array.pool.zone = []
@@ -158,6 +167,8 @@ func init_number():
 	number.size.minimap = 9
 	number.size.monster = 4
 	number.size.district = 16
+	number.size.associate = 3
+	number.size.regions = 3
 	
 	number.argument = {}
 	number.argument.base = 10
@@ -166,6 +177,7 @@ func init_number():
 func init_flag():
 	flag.ready = false
 	flag.generate = true
+	flag.stop = true
 
 func _ready():
 	init_list()

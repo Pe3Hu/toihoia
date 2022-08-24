@@ -38,7 +38,6 @@ func start_game():
 			champion.overcome(ruin)
 	
 	#print(Global.array.memory.time)
-	
 
 func generate_action():
 	for _i in 3:
@@ -59,6 +58,8 @@ func _input(event):
 	if event is InputEventMouseButton:
 		if Global.flag.generate:
 			generate_action()
+			#if Global.flag.stop:
+			Global.obj.minimap.click_f()
 			Global.flag.generate = !Global.flag.generate
 		else:
 			Global.flag.generate = !Global.flag.generate
