@@ -26,6 +26,8 @@ func init_primary_key():
 	number.primary_key.monster = 0
 	number.primary_key.district = 0
 	number.primary_key.region = 0
+	number.primary_key.ability = 0
+	
 
 func init_stat():
 	list.stat = {}
@@ -45,10 +47,21 @@ func init_stat():
 	list.stat["Art"] = {}
 	list.stat["Expansion"] = {}
 
+func init_elemental():
+	list.elemental = {}
+	add_elemental("Aqua",6)
+	add_elemental("Wind",9)
+	add_elemental("Fire",1)
+	add_elemental("Earth",4)
+	add_elemental("Ice",8)
+	add_elemental("Storm",3)
+	add_elemental("Lava",2)
+	add_elemental("Plant",7)
+
 func init_list():
 	init_window_size()
-	init_primary_key()
 	init_stat()
+	init_elemental()
 
 func init_array():
 	array.button = {}
@@ -89,7 +102,7 @@ func init_array():
 		Vector2(0,1),
 		Vector2(-1,0)
 	]
-	
+	array.ability = []
 
 func init_pool_zone():
 	array.pool.zone = []
@@ -128,6 +141,7 @@ func init_pool_pizza():
 					pizza.S = _s
 					array.pool.pizza .append(pizza)
 
+
 func get_next_partition(partition):
 	if partition.size() == 1:
 		return null
@@ -162,6 +176,8 @@ func init_obj():
 	ui.bar = []
 
 func init_number():
+	init_primary_key()
+	
 	number.size = {}
 	number.size.top = 10
 	number.size.minimap = 9
@@ -180,13 +196,16 @@ func init_flag():
 	flag.stop = true
 
 func _ready():
-	init_list()
+	init_number()
 	init_array()
+	init_list()
 	init_scene()
 	init_node()
 	init_obj()
-	init_number()
 	init_flag()
 
-
-	
+func add_elemental(key_,k_):
+	var value = {}
+	value.hitch = k_
+	value.wound = 10-k_
+	list.elemental[key_] = value

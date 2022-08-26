@@ -12,6 +12,7 @@ func _ready():
 	init_ruins()
 	start_game()
 	Global.obj.minimap = Classes.Minimap.new()
+	init_abilitys()
 	
 func init_champions():
 	
@@ -28,6 +29,13 @@ func init_ruins():
 	input.S = false
 	var ruin = Classes.Ruin.new(input)
 	Global.array.ruin.append(ruin)
+
+func init_abilitys():
+	add_ability("","Fire",0,1,12,0)
+	var ability = Global.array.ability[0]
+	var work = 10
+	var result = ability.calc_result(work)
+	print(result)
 
 func start_game():
 	var ruin = Global.array.ruin[0]
@@ -100,3 +108,16 @@ func _on_Timer_timeout():
 	
 	if Global.node.TimeBar.value >= Global.node.TimeBar.max_value:
 		Global.node.TimeBar.value -= Global.node.TimeBar.max_value
+
+func add_ability(name_,elemental_,hitch_,wound_,a_,b_):
+	var input = {}
+	input.name = name_
+	input.elemental = elemental_
+	input.divide = {}
+	input.divide.hitch = hitch_
+	input.divide.wound = wound_
+	input.factor = {}
+	input.factor.a = a_
+	input.factor.b = b_
+	var ability = Classes.Ability.new(input)
+	Global.array.ability.append(ability)
