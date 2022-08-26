@@ -709,17 +709,13 @@ class Ability:
 		champion_factor_.b = 0
 		
 		for key in array.key:
-			print(key)
 			number.work[key] = number.divide[key] * work_
 			var k = Global.list.elemental[string.elemental][key]
 			var base = 5
-			var result_0 = (base+number.work[key])/base 
-			print(result_0)
+			var result_0 = (base+k)/base*number.work[key]  
 			base = 12
 			var result_1 = ((number.factor.a+champion_factor_.a)*result_0+(number.factor.b+champion_factor_.b))/base
-			print(result_1)
 			var result_2 = round(sqrt(result_1))
-			print(result_2)
 			result[key] = result_2
 			
 		return result
@@ -728,17 +724,15 @@ class Ability:
 		array.key = []
 		for key in divide_:
 			array.key.append(key)
-			
+		
 		number.divide = {}
 		var sum = 0
 		
 		for key in array.key:
 			sum += divide_[key]
-			
+		
 		for key in array.key:
 			number.divide[key] = float(divide_[key]) / float(sum) 
-
-
 
 class Sorter:
     static func sort_ascending(a, b):

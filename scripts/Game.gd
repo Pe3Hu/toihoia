@@ -67,8 +67,8 @@ func _input(event):
 		if Global.flag.generate:
 			generate_action()
 			#if Global.flag.stop:
-			Global.obj.minimap.click_f()
-			Global.flag.generate = !Global.flag.generate
+			#Global.obj.minimap.click_f()
+			#Global.flag.generate = !Global.flag.generate
 		else:
 			Global.flag.generate = !Global.flag.generate
 			
